@@ -8,6 +8,6 @@ package Modelo;
  *
  * @author UTN
  */
-public enum EnumEspecialidades {
+public enum TiposEspecialidades {
     
 }

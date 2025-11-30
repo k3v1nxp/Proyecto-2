@@ -9,5 +9,29 @@ package Modelo;
  * @author UTN
  */
 public enum TiposEspecialidades {
+    Fuerza_Y_acondicionamiento("Fuerza"),
+
+    Entrenamiento_cardiovascular("Cardio"),
+
+    Entrenamientos_cuerpo_mente("Yoga"),
+
+    Especialidades_deportivas("Deportistas"),
+
+    bienestar_y_salud("Salud"),
+
+    clases_grupales("Clases");
+    
+    private String Especialidad;
+
+    public String getEspecialidad() {
+        return Especialidad;
+    }
+
+    private TiposEspecialidades(String Especialidad) {
+        this.Especialidad = Especialidad;
+    }
+    
+    
+    
     
 }

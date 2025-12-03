@@ -34,7 +34,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Clases = new javax.swing.JMenu();
         OpClases = new javax.swing.JMenuItem();
         Entrenadores = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        OpAgregarEntrenador = new javax.swing.JMenuItem();
+        OpBuscarEntrenador = new javax.swing.JMenuItem();
         Clientes = new javax.swing.JMenu();
         OpAgregarCliente = new javax.swing.JMenuItem();
         Pagos = new javax.swing.JMenu();
@@ -75,13 +76,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Entrenadores.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Entrenadores.setText("Entrenadores");
 
-        jMenuItem1.setText("Agregar");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        OpAgregarEntrenador.setText("Agregar");
+        OpAgregarEntrenador.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                OpAgregarEntrenadorActionPerformed(evt);
             }
         });
-        Entrenadores.add(jMenuItem1);
+        Entrenadores.add(OpAgregarEntrenador);
+
+        OpBuscarEntrenador.setText("Buscar");
+        Entrenadores.add(OpBuscarEntrenador);
 
         jMenuBar1.add(Entrenadores);
 
@@ -147,11 +151,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         
     }//GEN-LAST:event_OpAgregarClienteActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void OpAgregarEntrenadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpAgregarEntrenadorActionPerformed
         AgregarEntrenador  agregarentrenador = new  AgregarEntrenador();
         Escritorio.add(agregarentrenador);
        agregarentrenador.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_OpAgregarEntrenadorActionPerformed
 
     private void OpClasesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpClasesActionPerformed
         Clases clase = new Clases();
@@ -202,12 +206,13 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu Entrenadores;
     private javax.swing.JDesktopPane Escritorio;
     private javax.swing.JMenuItem OpAgregarCliente;
+    private javax.swing.JMenuItem OpAgregarEntrenador;
+    private javax.swing.JMenuItem OpBuscarEntrenador;
     private javax.swing.JMenuItem OpClases;
     private javax.swing.JMenuItem OpPagos;
     private javax.swing.JMenuItem OpUsuarios;
     private javax.swing.JMenu Pagos;
     private javax.swing.JMenu Usuarios;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
 }

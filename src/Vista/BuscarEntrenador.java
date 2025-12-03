@@ -29,17 +29,23 @@ public class BuscarEntrenador extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         FiltroEntrenador = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTablaEntrenadores = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("GYMPRIME");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        FiltroEntrenador.setText("jTextField1");
+        FiltroEntrenador.setText("Buscar...");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTablaEntrenadores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -50,7 +56,7 @@ public class BuscarEntrenador extends javax.swing.JInternalFrame {
                 "ID", "NOMBRE", "CONTACTO", "ESPECIALIDAD"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTablaEntrenadores);
 
         jButton1.setText("ELIMINAR");
 
@@ -112,6 +118,6 @@ public class BuscarEntrenador extends javax.swing.JInternalFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTablaEntrenadores;
     // End of variables declaration//GEN-END:variables
 }

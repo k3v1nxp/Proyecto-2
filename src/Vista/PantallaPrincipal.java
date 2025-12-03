@@ -38,6 +38,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         OpBuscarEntrenador = new javax.swing.JMenuItem();
         Clientes = new javax.swing.JMenu();
         OpAgregarCliente = new javax.swing.JMenuItem();
+        OpBuscarCliente = new javax.swing.JMenuItem();
         Pagos = new javax.swing.JMenu();
         OpPagos = new javax.swing.JMenuItem();
         Usuarios = new javax.swing.JMenu();
@@ -51,7 +52,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Escritorio.setLayout(EscritorioLayout);
         EscritorioLayout.setHorizontalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 398, Short.MAX_VALUE)
+            .addGap(0, 463, Short.MAX_VALUE)
         );
         EscritorioLayout.setVerticalGroup(
             EscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,6 +86,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Entrenadores.add(OpAgregarEntrenador);
 
         OpBuscarEntrenador.setText("Buscar");
+        OpBuscarEntrenador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpBuscarEntrenadorActionPerformed(evt);
+            }
+        });
         Entrenadores.add(OpBuscarEntrenador);
 
         jMenuBar1.add(Entrenadores);
@@ -99,6 +105,14 @@ public class PantallaPrincipal extends javax.swing.JFrame {
             }
         });
         Clientes.add(OpAgregarCliente);
+
+        OpBuscarCliente.setText("Buscar");
+        OpBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpBuscarClienteActionPerformed(evt);
+            }
+        });
+        Clientes.add(OpBuscarCliente);
 
         jMenuBar1.add(Clientes);
 
@@ -175,6 +189,19 @@ public class PantallaPrincipal extends javax.swing.JFrame {
        usuario.setVisible(true);
     }//GEN-LAST:event_OpUsuariosActionPerformed
 
+    private void OpBuscarEntrenadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpBuscarEntrenadorActionPerformed
+        BuscarEntrenador buscarEntrenador = new BuscarEntrenador();
+        Escritorio.add(buscarEntrenador);
+        buscarEntrenador.setVisible(true);
+       
+    }//GEN-LAST:event_OpBuscarEntrenadorActionPerformed
+
+    private void OpBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpBuscarClienteActionPerformed
+        BuscarCliente buscarCliente = new BuscarCliente();
+        Escritorio.add(buscarCliente);
+        buscarCliente.setVisible(true);
+    }//GEN-LAST:event_OpBuscarClienteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -207,6 +234,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane Escritorio;
     private javax.swing.JMenuItem OpAgregarCliente;
     private javax.swing.JMenuItem OpAgregarEntrenador;
+    private javax.swing.JMenuItem OpBuscarCliente;
     private javax.swing.JMenuItem OpBuscarEntrenador;
     private javax.swing.JMenuItem OpClases;
     private javax.swing.JMenuItem OpPagos;

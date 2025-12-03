@@ -31,7 +31,4 @@ public enum TiposEspecialidades {
         this.Especialidad = Especialidad;
     }
     
-    
-    
-    
 }

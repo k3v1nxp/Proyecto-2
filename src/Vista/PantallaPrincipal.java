@@ -32,7 +32,8 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Escritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         Clases = new javax.swing.JMenu();
-        OpClases = new javax.swing.JMenuItem();
+        OpRegistro = new javax.swing.JMenuItem();
+        OpGestion = new javax.swing.JMenuItem();
         Entrenadores = new javax.swing.JMenu();
         OpAgregarEntrenador = new javax.swing.JMenuItem();
         OpBuscarEntrenador = new javax.swing.JMenuItem();
@@ -64,13 +65,16 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Clases.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Clases.setText("Clases");
 
-        OpClases.setText("Clases");
-        OpClases.addActionListener(new java.awt.event.ActionListener() {
+        OpRegistro.setText("Registro");
+        OpRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                OpClasesActionPerformed(evt);
+                OpRegistroActionPerformed(evt);
             }
         });
-        Clases.add(OpClases);
+        Clases.add(OpRegistro);
+
+        OpGestion.setText("Gestion");
+        Clases.add(OpGestion);
 
         jMenuBar1.add(Clases);
 
@@ -171,11 +175,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
        agregarentrenador.setVisible(true);
     }//GEN-LAST:event_OpAgregarEntrenadorActionPerformed
 
-    private void OpClasesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpClasesActionPerformed
-        Clases clase = new Clases();
-        Escritorio.add(clase);
-        clase.setVisible(true);
-    }//GEN-LAST:event_OpClasesActionPerformed
+    private void OpRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpRegistroActionPerformed
+        RegistroClases registro = new RegistroClases();
+        Escritorio.add(registro);
+        registro.setVisible(true);
+    }//GEN-LAST:event_OpRegistroActionPerformed
 
     private void OpPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpPagosActionPerformed
         Pagos pago = new Pagos();
@@ -236,8 +240,9 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem OpAgregarEntrenador;
     private javax.swing.JMenuItem OpBuscarCliente;
     private javax.swing.JMenuItem OpBuscarEntrenador;
-    private javax.swing.JMenuItem OpClases;
+    private javax.swing.JMenuItem OpGestion;
     private javax.swing.JMenuItem OpPagos;
+    private javax.swing.JMenuItem OpRegistro;
     private javax.swing.JMenuItem OpUsuarios;
     private javax.swing.JMenu Pagos;
     private javax.swing.JMenu Usuarios;

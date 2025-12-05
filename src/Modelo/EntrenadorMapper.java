@@ -9,5 +9,20 @@ package Modelo;
  * @author UTN
  */
 public class EntrenadorMapper {
-    
+
+    public EntrenadorDto toDto(Entrenador entrenador) {
+
+        return new EntrenadorDto(entrenador.getId(),
+                entrenador.getNombre(),
+                entrenador.getContacto(),
+                entrenador.getEspecialidad());
+    }
+
+    public Entrenador toEntidad(EntrenadorDto dto) {
+
+        return new Entrenador(dto.getId(),
+                dto.getNombre(),
+                dto.getContacto(),
+                dto.getEspecialidad());
+    }
 }

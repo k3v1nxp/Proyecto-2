@@ -9,5 +9,15 @@ package Modelo;
  * @author UTN
  */
 public class ClienteMapper {
+        public ClienteDto toDto(Cliente cliente){
+        return new ClienteDto(cliente.getId(),cliente.getNombre()
+                ,cliente.getMenbresia(),cliente.getFecha_nacimiento(),
+            cliente.getNumero());
+    }
     
+    public Cliente toEntidad(ClienteDto dto){
+        return new Cliente(dto.getId(),dto.getNombre(),dto.getMenbresia()
+                ,dto.getFecha_nacimiento()
+                ,dto.getNumero());
+    }
 }

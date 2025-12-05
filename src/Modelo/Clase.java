@@ -12,6 +12,9 @@ public class Clase {
     private int id_clase;
     private Tipos_de_Clases tipo;
     private Entrenador entrenador;
+    private String horario;
+    private int capacidadMaxima;
+    private int capacidadActual; 
 
     public int getId_clase() {
         return id_clase;
@@ -37,12 +40,48 @@ public class Clase {
         this.entrenador = entrenador;
     }
 
-    public Clase(int id_clase, Tipos_de_Clases tipo, Entrenador entrenador) {
+    public String getHorario() {
+        return horario;
+    }
+
+    public void setHorario(String horario) {
+        this.horario = horario;
+    }
+
+    public int getCapacidadMaxima() {
+        return capacidadMaxima;
+    }
+
+    public void setCapacidadMaxima(int capacidadMaxima) {
+        this.capacidadMaxima = capacidadMaxima;
+    }
+
+    public int getCapacidadActual() {
+        return capacidadActual;
+    }
+
+    public void setCapacidadActual(int capacidadActual) {
+        this.capacidadActual = capacidadActual;
+    }
+
+    public Clase(int id_clase, Tipos_de_Clases tipo, Entrenador entrenador, String horario, int capacidadMaxima, int capacidadActual) {
         this.id_clase = id_clase;
         this.tipo = tipo;
         this.entrenador = entrenador;
+        this.horario = horario;
+        this.capacidadMaxima = capacidadMaxima;
+        this.capacidadActual = 0;
     }
-    
-    
-    
+    //para crear nuevas clases 
+        public Clase(Tipos_de_Clases tipo, Entrenador entrenador, 
+                 String horario, int capacidadMaxima) {
+        this.tipo = tipo;
+        this.entrenador = entrenador;
+        this.horario = horario;
+        this.capacidadMaxima = capacidadMaxima;
+        this.capacidadActual = 0;
+    }
+      public boolean tieneCuposDisponibles() {
+        return capacidadActual < capacidadMaxima;
+    }
 }

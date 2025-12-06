@@ -16,6 +16,7 @@ public class Cliente {
    private TipoMembresia menbresia;
    private Date fecha_nacimiento;
    private int Numero;
+   private Date fechaVencimientoMembresia;
 
     public int getId() {
         return id;
@@ -56,6 +57,7 @@ public class Cliente {
     public void setMenbresia(TipoMembresia menbresia) {
         this.menbresia = menbresia;
     }
+    
 
     public Cliente(int id, String nombre, TipoMembresia menbresia, Date fecha_nacimiento, int Numero) {
         this.id = id;

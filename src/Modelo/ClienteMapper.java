@@ -10,9 +10,14 @@ package Modelo;
  */
 public class ClienteMapper {
         public ClienteDto toDto(Cliente cliente){
-        return new ClienteDto(cliente.getId(),cliente.getNombre()
-                ,cliente.getMenbresia(),cliente.getFecha_nacimiento(),
-            cliente.getNumero());
+        return new ClienteDto(
+            cliente.getId(),
+            cliente.getNombre(),
+            cliente.getMenbresia(),
+            cliente.getFecha_nacimiento(),
+            cliente.getNumero(),
+            cliente.getFechaVencimientoMembresia()
+        );
     }
     
     public Cliente toEntidad(ClienteDto dto){

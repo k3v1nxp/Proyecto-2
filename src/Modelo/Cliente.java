@@ -65,15 +65,23 @@ public class Cliente {
     public void setFechaVencimientoMembresia(Date fechaVencimientoMembresia) {
         this.fechaVencimientoMembresia = fechaVencimientoMembresia;
     }
-    
 
-    public Cliente(int id, String nombre, TipoMembresia menbresia, Date fecha_nacimiento, int Numero) {
+    public Cliente(int id, String nombre, TipoMembresia membresia, Date fecha_nacimiento, int Numero) {
         this.id = id;
         this.nombre = nombre;
-        this.menbresia = menbresia;
+        this.menbresia = membresia;
         this.fecha_nacimiento = fecha_nacimiento;
         this.Numero = Numero;
         this.fechaVencimientoMembresia = null;
     }
-   
+    
+    public Cliente(int id, String nombre, TipoMembresia membresia, Date fecha_nacimiento, int Numero, Date fechaVencimientoMembresia) {
+        this.id = id;
+        this.nombre = nombre;
+        this.menbresia = membresia;
+        this.fecha_nacimiento = fecha_nacimiento;
+        this.Numero = Numero;
+        this.fechaVencimientoMembresia = fechaVencimientoMembresia;
+    }
+    
 }

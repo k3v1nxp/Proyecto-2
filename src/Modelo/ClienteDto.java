@@ -15,8 +15,9 @@ public class ClienteDto {
    private final String nombre;
    private final TipoMembresia menbresia;
    private final Date fecha_nacimiento;
-   private final int Numero;
-
+   private final int numero;
+   private final Date fechaVencimientoMembresia;
+  
     public int getId() {
         return id;
     }
@@ -33,17 +34,30 @@ public class ClienteDto {
         return fecha_nacimiento;
     }
 
+    public Date getFechaVencimientoMembresia() {
+        return fechaVencimientoMembresia;
+    }
+
     public int getNumero() {
         return Numero;
     }
 
-    public ClienteDto(int id, String nombre, TipoMembresia menbresia, Date fecha_nacimiento, int Numero) {
+    public ClienteDto(int id, String nombre, TipoMembresia membresia, Date fecha_nacimiento, int numero) {
         this.id = id;
         this.nombre = nombre;
-        this.menbresia = menbresia;
+        this.menbresia = membresia;
         this.fecha_nacimiento = fecha_nacimiento;
-        this.Numero = Numero;
+        this.numero = numero;
+        this.fechaVencimientoMembresia = null;
     }
-   
-   
+    
+    public ClienteDto(int id, String nombre, TipoMembresia membresia, Date fecha_nacimiento, int numero, Date fechaVencimientoMembresia) {
+        this.id = id;
+        this.nombre = nombre;
+        this.menbresia = membresia;
+        this.fecha_nacimiento = fecha_nacimiento;
+        this.numero = numero;
+        this.fechaVencimientoMembresia = fechaVencimientoMembresia;
+    }
+    
 }

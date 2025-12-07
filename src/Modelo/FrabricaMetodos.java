@@ -10,7 +10,7 @@ package Modelo;
  */
 public interface FrabricaMetodos {
     public void agregar();
-    public void Buscar();
-    public void Eliminar();
-    
+    public void buscar();
+    public void eliminar();
+    public void actualizar();
 }

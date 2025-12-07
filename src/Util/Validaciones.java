@@ -15,24 +15,23 @@ import java.util.Date;
 public class Validaciones {
     
     
-     // Valida si un texto no está vacío
+     // Valida un texto no está vacío
     public static boolean esTextoValido(String texto) {
         return texto != null && !texto.trim().isEmpty();
     }
     
-    // Valida si un número es positivo
-     
+    // Valida numero positivo
     public static boolean esNumeroPositivo(int numero) {
         return numero > 0;
     }
     
     
-    //  Valida si un número decimal es positivo
+    //  Valida numeros decimal positivos
     public static boolean esNumeroPositivo(double numero) {
         return numero > 0;
     }
     
-    // Valida si una fecha es válida (formato dd/MM/yyyy)
+    // Valida fecha (formato dd/MM/yyyy)
     public static Date parsearFecha(String fechaTexto) {
         if (fechaTexto == null || fechaTexto.trim().isEmpty()) {
             return null;
@@ -47,7 +46,7 @@ public class Validaciones {
     }
     
     
-    //Valida si un email tiene formato válido (básico)
+    //Valida si un email tiene formato con @ y .
     
     public static boolean esEmailValido(String email) {
         if (email == null || email.trim().isEmpty()) {
@@ -57,7 +56,7 @@ public class Validaciones {
     }
     
     
-     // Valida si un teléfono tiene formato válido (solo números)
+     // Valida si el telfono son solo numero y que sean 8 digitos
     public static boolean esTelefonoValido(String telefono) {
         if (telefono == null || telefono.trim().isEmpty()) {
             return false;

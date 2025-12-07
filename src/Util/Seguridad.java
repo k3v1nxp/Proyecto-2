@@ -8,6 +8,16 @@ package Util;
  *
  * @author kevin
  */
+
 public class Seguridad {
+        
+    public static String hashcode(String texto) {
+        return String.valueOf(texto.hashCode());
+    }
+    public static boolean verificarContraseña(String contraseña, String hashGuardado) {
+        String hashCalculado = hashcode(contraseña);
+        return hashCalculado.equals(hashGuardado);
+    }
     
 }
+

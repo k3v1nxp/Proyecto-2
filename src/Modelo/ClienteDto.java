@@ -39,7 +39,7 @@ public class ClienteDto {
     }
 
     public int getNumero() {
-        return Numero;
+        return numero;
     }
 
     public ClienteDto(int id, String nombre, TipoMembresia membresia, Date fecha_nacimiento, int numero) {

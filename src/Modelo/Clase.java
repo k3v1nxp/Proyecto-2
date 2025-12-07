@@ -70,7 +70,7 @@ public class Clase {
         this.entrenador = entrenador;
         this.horario = horario;
         this.capacidadMaxima = capacidadMaxima;
-        this.capacidadActual = 0;
+        this.capacidadActual = capacidadActual;
     }
     //para crear nuevas clases 
         public Clase(Tipos_de_Clases tipo, Entrenador entrenador, 

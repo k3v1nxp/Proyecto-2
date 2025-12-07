@@ -9,5 +9,18 @@ package Modelo;
  * @author UTN
  */
 public enum Tipos_de_Clases {
+    CARDIO("Cardiovascular"),
+    PESA("Pesa"),
+    CROSSFIT("Crossfit"),
+    ZUMBA("Zumba");
     
+    private final String nombre;
+    
+    private Tipos_de_Clases(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    public String getNombre() {
+        return nombre;
+    }
 }

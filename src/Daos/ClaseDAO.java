@@ -4,6 +4,7 @@
  */
 package Daos;
 
+import Modelo.ClaseDto;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -34,35 +35,49 @@ public class ClaseDAO {
     public void agregar(ClaseDto dto){
         try {
             Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement("INSERT INTO categoria (id,nombre) VALUES (?,?)");
-            ps.setInt(1, dto.getId());
-            ps.setString(2, dto.getNombre());
+            PreparedStatement ps = cn.prepareStatement("INSERT INTO clases (tipo, id_entrenador, horario, capacidad_maxima, capacidad_actual, activa) VALUES (?, ?, ?, ?, ?, ?)");
+            ps.setString(1, dto.getTipo().name());
+            ps.setInt(2, dto.getEntrenador().getId());
+            ps.setString(3, dto.getHorario());
+            ps.setInt(4, dto.getCapacidadMaxima());
+            ps.setInt(5, dto.getCapacidadActual());
+            ps.setBoolean(6, true);
+        } catch (SQLException ex) {
+            System.out.println("Error: "+ex);
+        }
+    }
+    
+    public void actualizar(ClaseDto dto){
+        try {
+            Connection cn = getConnection();
+            PreparedStatement ps = cn.prepareStatement("UPDATE clases SET tipo = ?, id_entrenador = ?, horario = ?, capacidad_maxima = ?, capacidad_actual = ? WHERE id_clase = ?");
+            ps.setString(1, dto.getTipo().name());
+            ps.setInt(2, dto.getEntrenador().getId());
+            ps.setString(3, dto.getHorario());
+            ps.setInt(4, dto.getCapacidadMaxima());
+            ps.setInt(5, dto.getCapacidadActual());
+            ps.setInt(6, dto.getId_clase());
             ps.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error: "+ex);
         }
     }
     
-    public void actualizar(CategoriaDto dto){
+    public ClaseDto buscar(int idClase){
         try {
             Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement("UPDATE categoria set nombre=? where id = ?");
-            ps.setString(1, dto.getNombre());
-            ps.setInt(2, dto.getId());
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println("Error: "+ex);
-        }
-    }
-    
-    public CategoriaDto buscar(int id){
-        try {
-            Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement("SELECT id,nombre FROM categoria WHERE id=?");
-            ps.setInt(1, id);
+            PreparedStatement ps = cn.prepareStatement(  "SELECT id_clase, tipo, entrenador, horario, capacidad_maxima, capacidad_actual " +
+            "FROM clases WHERE id_clase = ? AND activa = TRUE");
+            
+            ps.setInt(1, idClase);
             ResultSet rs= ps.executeQuery();
             if (rs.next()){
-                return new CategoriaDto(rs.getInt(1),rs.getString(2));
+                return new ClaseDto(rs.getInt("id_clase"),
+                rs.getString("tipo"),
+                rs.getInt("entrenador"),
+                rs.getString("horario"),
+                rs.getInt("capacidad_maxima"),
+                rs.getInt("capacidad_actual"));
             }
         } catch (SQLException ex) {
             System.out.println("Error: "+ex);

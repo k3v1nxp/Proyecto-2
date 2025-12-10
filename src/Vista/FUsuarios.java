@@ -39,16 +39,16 @@ public class FUsuarios extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(174, 174, 174)
+                .addGap(138, 138, 138)
                 .addComponent(jLabel1)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addContainerGap(165, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(95, 95, 95)
+                .addGap(56, 56, 56)
                 .addComponent(jLabel1)
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addContainerGap(202, Short.MAX_VALUE))
         );
 
         pack();

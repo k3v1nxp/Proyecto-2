@@ -1,0 +1,39 @@
+services:
+  mariadb_gimnasio:
+    image: mariadb:11
+    container_name: mariadb_gimnasio
+    restart: unless-stopped
+    ports:
+      - "${MARIADB_PORT}:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD}"
+      MARIADB_DATABASE: "${MARIADB_DATABASE}"
+      MARIADB_USER: "${MARIADB_USER}"
+      MARIADB_PASSWORD: "${MARIADB_PASSWORD}"
+      TZ: "America/Costa_Rica"
+    volumes:
+      - mariadb_data_gimnasio:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck.sh --connect --innodb_initialized"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin_gimnasio:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_gimnasio
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mariadb_gimnasio
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    depends_on:
+      mariadb_gimnasio:
+        condition: service_healthy
+
+volumes:
+  mariadb_data_gimnasio:

@@ -64,7 +64,7 @@ public class Clase {
         this.capacidadActual = capacidadActual;
     }
 
-    public Clase(int id_clase, Tipos_de_Clases tipo, Entrenador entrenador, String horario, int capacidadMaxima, int capacidadActual) {
+    public Clase(int id_clase,Tipos_de_Clases tipo, Entrenador entrenador, String horario, int capacidadMaxima, int capacidadActual) {
         this.id_clase = id_clase;
         this.tipo = tipo;
         this.entrenador = entrenador;
@@ -72,15 +72,7 @@ public class Clase {
         this.capacidadMaxima = capacidadMaxima;
         this.capacidadActual = capacidadActual;
     }
-    //para crear nuevas clases 
-        public Clase(Tipos_de_Clases tipo, Entrenador entrenador, 
-                 String horario, int capacidadMaxima) {
-        this.tipo = tipo;
-        this.entrenador = entrenador;
-        this.horario = horario;
-        this.capacidadMaxima = capacidadMaxima;
-        this.capacidadActual = 0;
-    }
+    
       public boolean tieneCuposDisponibles() {
         return capacidadActual < capacidadMaxima;
     }

@@ -6,6 +6,7 @@ package Daos;
 
 import Modelo.ClaseDto;
 import Modelo.Entrenador;
+import Modelo.EntrenadorDto;
 import Modelo.Tipos_de_Clases;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,8 +39,8 @@ public class ClaseDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement("INSERT INTO clases (tipo, id_entrenador, horario, capacidad_maxima, capacidad_actual, activa) VALUES (?, ?, ?, ?, ?, ?)");
-            ps.setString(1, dto.getTipo().name());
-            ps.setInt(2, dto.getEntrenador().getId());
+            ps.setString(1, dto.getTipo()); // String del DTO
+            ps.setInt(2, Integer.parseInt(dto.getidEntrenador())); 
             ps.setString(3, dto.getHorario());
             ps.setInt(4, dto.getCapacidadMaxima());
             ps.setInt(5, dto.getCapacidadActual());
@@ -53,8 +54,8 @@ public class ClaseDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement("UPDATE clases SET tipo = ?, id_entrenador = ?, horario = ?, capacidad_maxima = ?, capacidad_actual = ? WHERE id_clase = ?");
-            ps.setString(1, dto.getTipo().name());
-            ps.setInt(2, dto.getEntrenador().getId());
+            ps.setString(1, dto.getTipo());
+            ps.setInt(2, Integer.parseInt(dto.getidEntrenador()));
             ps.setString(3, dto.getHorario());
             ps.setInt(4, dto.getCapacidadMaxima());
             ps.setInt(5, dto.getCapacidadActual());
@@ -74,16 +75,16 @@ public class ClaseDAO {
             ps.setInt(1, idClase);
             ResultSet rs= ps.executeQuery();
             if (rs.next()){
-                String tipoDB = rs.getString("tipo");
-                Tipos_de_Clases tipoClase = Tipos_de_Clases.valueOf(tipoDB.toUpperCase());
-                int idEntrenador = rs.getInt("entrenador");
-                Entrenador entrenador = buscarEntrenadorPorId(idEntrenador);
-                return new ClaseDto(rs.getInt("id_clase"),
-                tipoClase,
-                entrenador, // <-- Objeto Entrenador
-                rs.getString("horario"),
-                rs.getInt("capacidad_maxima"),
-                rs.getInt("capacidad_actual"));
+              
+                
+                return new ClaseDto(
+                    rs.getInt("id_clase"),
+                    rs.getString("tipo"),
+                    String.valueOf(rs.getInt("id_entrenador")),
+                    rs.getString("horario"),
+                    rs.getInt("capacidad_maxima"),
+                    rs.getInt("capacidad_actual")
+                );
             }
         } catch (SQLException ex) {
             System.out.println("Error: "+ex);
@@ -110,19 +111,17 @@ public class ClaseDAO {
             ResultSet rs= ps.executeQuery();
             List<ClaseDto> list=new ArrayList(); 
             while (rs.next()){
-                Tipos_de_Clases tipo = Tipos_de_Clases.valueOf(
-                rs.getString(2).toUpperCase());
-                int idEntrenador = rs.getInt(3);
-                
-            Entrenador entrenador = buscarEntrenadorPorId(idEntrenador);
-                  list.add(new ClaseDto(rs.getInt(1),
-                    tipo,
-                    entrenador,
-                    rs.getString(4),
-                    rs.getInt(5),
-                    rs.getInt(6)
-                )
-            );
+                ClaseDto dto = new ClaseDto(
+                    rs.getInt("id_clase"),
+                    rs.getString("tipo"),
+                    String.valueOf(rs.getInt("id_entrenador")),
+                    rs.getString("horario"),
+                    rs.getInt("capacidad_maxima"),
+                    rs.getInt("capacidad_actual")
+                );
+
+                list.add(dto);
+            
             }
             return list;
         } catch (SQLException ex) {

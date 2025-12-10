@@ -4,19 +4,21 @@
  */
 package Modelo;
 
-import com.sun.jdi.connect.spi.Connection;
 
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Connection;
 /**
  *
  * @author UTN
  */
 public class ConexionBD {
-       private static ConexionBD instancia;
+      private static ConexionBD instancia;
     private Connection conexion;
 
-    private final String URL = "jdbc:mariadb://localhost:3306/GimnasioApp";
-    private final String USUARIO = "tu_usuario";
-    private final String PASSWORD = "tu_contraseña";
+    private final String URL = "jdbc:mysql://localhost:3307/GimnasioApp?useSSL=false&serverTimezone=UTC";
+    private final String USUARIO = "GimUser";
+    private final String PASSWORD = "GimUser123@";
 
     private ConexionBD() {
         try {

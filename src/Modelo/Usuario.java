@@ -10,9 +10,9 @@ package Modelo;
  */
 public class Usuario {
     private int id;
-    private String nombreUsuario;
+    private String usuario;
     private String contraseña; // se tiene que enciptar
-    private String rol; // entrenador o admin
+    private T_Rol rol; // entrenador o admin
     private boolean activo;
 
     public int getId() {
@@ -23,13 +23,15 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public String getUsuario() {
+        return usuario;
     }
 
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
+
+   
 
     public String getContraseña() {
         return contraseña;
@@ -39,13 +41,15 @@ public class Usuario {
         this.contraseña = contraseña;
     }
 
-    public String getRol() {
+    public T_Rol getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(T_Rol rol) {
         this.rol = rol;
     }
+
+    
 
     public boolean isActivo() {
         return activo;
@@ -55,9 +59,9 @@ public class Usuario {
         this.activo = activo;
     }
 
-    public Usuario(int id, String nombreUsuario, String contraseña, String rol, boolean activo) {
+    public Usuario(int id, String usuario, String contraseña, T_Rol rol, boolean activo) {
         this.id = id;
-        this.nombreUsuario = nombreUsuario;
+        this.usuario = usuario;
         this.contraseña = contraseña;
         this.rol = rol;
         this.activo = activo;

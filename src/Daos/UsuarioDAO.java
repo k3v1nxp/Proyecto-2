@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Daos;
+import Modelo.ConexionBD;
 import Modelo.T_Rol;
 import Modelo.UsuarioDto;
 import java.sql.Connection;
@@ -18,18 +19,9 @@ import java.util.List;
  * @author kevin
  */
 public class UsuarioDAO {
-    private final String url;
-    private final String user;
-    private final String password;
-
-    public UsuarioDAO() {
-        this.url = "Agregar";
-        this.user = "Agregar";
-        this.password = "Agregar";
-    }
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+    
+    private Connection getConnection() {
+        return ConexionBD.getInstancia().getConexion();
     }
     
      public void agregar(UsuarioDto dto) {

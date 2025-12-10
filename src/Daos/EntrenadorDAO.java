@@ -5,6 +5,7 @@
 package Daos;
 
 import Modelo.ClaseDto;
+import Modelo.ConexionBD;
 import Modelo.Entrenador;
 import Modelo.EntrenadorDto;
 import Modelo.TiposEspecialidades;
@@ -22,18 +23,8 @@ import java.util.List;
  * @author kevin
  */
 public class EntrenadorDAO {
-    private final String url;
-    private final String user;
-    private final String password;
-
-    public EntrenadorDAO() {
-        this.url = "Agregar";
-        this.user = "Agregar";
-        this.password = "Agregar";
-    }
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+   private Connection getConnection() {
+        return ConexionBD.getInstancia().getConexion();
     }
     
     public void agregar(EntrenadorDto dto){

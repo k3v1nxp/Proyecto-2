@@ -5,6 +5,7 @@
 package Daos;
 
 import Modelo.ClienteDto;
+import Modelo.ConexionBD;
 import Modelo.TipoMembresia;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,18 +21,8 @@ import java.util.List;
  * @author kevin
  */
 public class ClienteDAO {
-    private final String url;
-    private final String user;
-    private final String password;
-
-    public ClienteDAO() {
-        this.url = "Agregar";
-        this.user = "Agregar";
-        this.password = "Agregar";
-    }
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+    private Connection getConnection() {
+        return ConexionBD.getInstancia().getConexion();
     }
 
     public void agregar(ClienteDto dto) {

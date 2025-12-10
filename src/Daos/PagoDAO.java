@@ -4,6 +4,7 @@
  */
 package Daos;
 
+import Modelo.ConexionBD;
 import Modelo.PagoDto;
 import java.sql.Connection;
 import java.sql.Date;
@@ -21,18 +22,8 @@ import java.util.List;
 
 public class PagoDAO {
 
-    private final String url;
-    private final String user;
-    private final String password;
-
-    public PagoDAO() {
-        this.url = "Agregar";
-        this.user = "Agregar";
-        this.password = "Agregar";
-    }
-
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+    private Connection getConnection() {
+        return ConexionBD.getInstancia().getConexion();
     }
     
      public void agregar(PagoDto dto) {

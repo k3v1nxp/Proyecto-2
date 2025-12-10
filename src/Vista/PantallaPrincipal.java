@@ -194,14 +194,14 @@ public class PantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_OpUsuariosActionPerformed
 
     private void OpBuscarEntrenadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpBuscarEntrenadorActionPerformed
-        BuscarEntrenador buscarEntrenador = new BuscarEntrenador();
+        GestionarEntrenador buscarEntrenador = new GestionarEntrenador();
         Escritorio.add(buscarEntrenador);
         buscarEntrenador.setVisible(true);
        
     }//GEN-LAST:event_OpBuscarEntrenadorActionPerformed
 
     private void OpBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpBuscarClienteActionPerformed
-        BuscarCliente buscarCliente = new BuscarCliente();
+        GestionarCliente buscarCliente = new GestionarCliente();
         Escritorio.add(buscarCliente);
         buscarCliente.setVisible(true);
     }//GEN-LAST:event_OpBuscarClienteActionPerformed

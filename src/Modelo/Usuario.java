@@ -11,7 +11,7 @@ package Modelo;
 public class Usuario {
     private int id;
     private String usuario;
-    private String contraseña; // se tiene que enciptar
+    private String contraseña; // se tiene que encriptar luego desde un paquete servicio
     private T_Rol rol; // entrenador o admin
     private boolean activo;
 

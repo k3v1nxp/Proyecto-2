@@ -5,6 +5,8 @@
 package Daos;
 
 import Modelo.ClaseDto;
+import Modelo.Entrenador;
+import Modelo.Tipos_de_Clases;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -72,9 +74,13 @@ public class ClaseDAO {
             ps.setInt(1, idClase);
             ResultSet rs= ps.executeQuery();
             if (rs.next()){
+                String tipoDB = rs.getString("tipo");
+                Tipos_de_Clases tipoClase = Tipos_de_Clases.valueOf(tipoDB.toUpperCase());
+                int idEntrenador = rs.getInt("entrenador");
+                Entrenador entrenador = buscarEntrenadorPorId(idEntrenador);
                 return new ClaseDto(rs.getInt("id_clase"),
-                rs.getString("tipo"),
-                rs.getInt("entrenador"),
+                tipoClase,
+                entrenador, // <-- Objeto Entrenador
                 rs.getString("horario"),
                 rs.getInt("capacidad_maxima"),
                 rs.getInt("capacidad_actual"));
@@ -88,7 +94,7 @@ public class ClaseDAO {
     public void eliminar(int id){ 
         try {
             Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement("DELETE categoria From categoria where id = ?");
+            PreparedStatement ps = cn.prepareStatement("DELETE clases From clases where id = ?");
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (SQLException ex) {
@@ -96,14 +102,27 @@ public class ClaseDAO {
         }
     }
     
-    public List<CategoriaDto> obtenerTodo(){ 
+    public List<ClaseDto> obtenerTodo(){ 
         try {
             Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement("SELECT id,nombre FROM categoria");
+            PreparedStatement ps = cn.prepareStatement("SELECT id_clase, tipo, id_entrenador, horario, capacidad_maxima, capacidad_actual " +
+            "FROM clases WHERE activa = TRUE");
             ResultSet rs= ps.executeQuery();
-            List<CategoriaDto> list=new ArrayList(); 
+            List<ClaseDto> list=new ArrayList(); 
             while (rs.next()){
-                list.add(new CategoriaDto(rs.getInt(1),rs.getString(2)));
+                Tipos_de_Clases tipo = Tipos_de_Clases.valueOf(
+                rs.getString(2).toUpperCase());
+                int idEntrenador = rs.getInt(3);
+                
+            Entrenador entrenador = buscarEntrenadorPorId(idEntrenador);
+                  list.add(new ClaseDto(rs.getInt(1),
+                    tipo,
+                    entrenador,
+                    rs.getString(4),
+                    rs.getInt(5),
+                    rs.getInt(6)
+                )
+            );
             }
             return list;
         } catch (SQLException ex) {

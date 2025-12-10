@@ -24,7 +24,7 @@ public class Entrenador {
     public void setContacto(String contacto) {this.contacto = contacto;}
     public void setEspecialidad(TiposEspecialidades especialidad) {  this.especialidad = especialidad;}
       
-
+    public Entrenador() {}
     public Entrenador(int id, String nombre, String contacto, TiposEspecialidades especialidad) {
         this.id = id;
         this.nombre = nombre;

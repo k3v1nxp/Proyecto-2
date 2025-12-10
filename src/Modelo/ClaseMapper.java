@@ -4,20 +4,39 @@
  */
 package Modelo;
 
+import Mapper.IMapper;
+
 /**
  *
  * @author kevin
  */
-public class ClaseMapper {
-    public ClaseDto toDto(Clase clase){
-        return new ClaseDto(clase.getId_clase(),clase.getTipo(),clase.getEntrenador(),
-        clase.getHorario(),clase.getCapacidadMaxima(),clase.getCapacidadActual());
-        
-    }
-    
-    public Clase toEntidad(ClaseDto dto){
-        return new Clase(dto.getId_clase(),dto.getTipo(),dto.getEntrenador(),
-        dto.getHorario(),dto.getCapacidadMaxima(),dto.getCapacidadActual());
+public class ClaseMapper implements IMapper<Clase,ClaseDto> {
+     private String idEntrenador;
+
+    @Override
+    public ClaseDto ToDTO(Clase ent) {
+        return new ClaseDto(
+            ent.getId_clase(),
+            ent.getTipo().name(),
+            String.valueOf(ent.getEntrenador().getId()),
+            ent.getHorario(),
+            ent.getCapacidadMaxima(),
+            ent.getCapacidadActual());
+        }
+
+    @Override
+    public Clase ToEntidad(ClaseDto dto) {
+       Entrenador entrenador = new Entrenador();
+       entrenador.setId(Integer.parseInt(dto.getidEntrenador()));
+
+        return new Clase(
+            dto.getId_clase(),
+            Tipos_de_Clases.valueOf(dto.getTipo().toUpperCase()),
+            entrenador,
+            dto.getHorario(),
+            dto.getCapacidadMaxima(),
+            dto.getCapacidadActual()
+        );
     }
 }
 

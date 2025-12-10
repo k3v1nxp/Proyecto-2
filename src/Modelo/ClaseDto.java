@@ -10,8 +10,8 @@ package Modelo;
  */
 public class ClaseDto {
     private int id_clase;
-    private Tipos_de_Clases tipo;
-    private Entrenador entrenador;
+    private String tipo;
+    private String idEntrenador;;
     private String horario;
     private int capacidadMaxima;
     private int capacidadActual;
@@ -20,13 +20,15 @@ public class ClaseDto {
         return id_clase;
     }
 
-    public Tipos_de_Clases getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public Entrenador getEntrenador() {
-        return entrenador;
+    public String getidEntrenador() {
+        return idEntrenador;
     }
+
+
 
     public String getHorario() {
         return horario;
@@ -40,12 +42,14 @@ public class ClaseDto {
         return capacidadActual;
     }
 
-    public ClaseDto(int id_clase, Tipos_de_Clases tipo, Entrenador entrenador, String horario, int capacidadMaxima, int capacidadActual) {
+    public ClaseDto(int id_clase, String tipo, String idEntrenador, String horario, int capacidadMaxima, int capacidadActual) {
         this.id_clase = id_clase;
         this.tipo = tipo;
-        this.entrenador = entrenador;
+        this.idEntrenador =idEntrenador;
         this.horario = horario;
         this.capacidadMaxima = capacidadMaxima;
         this.capacidadActual = capacidadActual;
     }
+
+
 }

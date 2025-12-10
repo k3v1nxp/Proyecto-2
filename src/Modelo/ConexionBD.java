@@ -5,7 +5,8 @@
 package Modelo;
 
 import com.sun.jdi.connect.spi.Connection;
-
+import java.sql.DriverManager;
+import java.sql.SQLException;
 /**
  *
  * @author UTN

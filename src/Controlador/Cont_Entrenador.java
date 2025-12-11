@@ -16,10 +16,10 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author UTN
  */
-public class EntrenadorController {
+public class Cont_Entrenador {
    private EntrenadorDAO entrenadorDAO;
     
-    public EntrenadorController() {
+    public Cont_Entrenador() {
         entrenadorDAO = new EntrenadorDAO();
     }
     

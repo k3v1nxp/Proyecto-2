@@ -28,11 +28,11 @@ public class UsuarioDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement(
-                "INSERT INTO usuario (id, usuario, contraseña, rol, activo) "
-                + "VALUES (?, ?, ?, ?, ?)"
-            );
-
-            ps.setInt(1, dto.getId());
+    "INSERT INTO usuario (usuario, contraseña, rol, activo) " 
+    + "VALUES (?, ?, ?, ?)"
+    );// se usa asi por que la idea es que el id se autogenere
+            
+            ps.setString(1, dto.getUsuario());
             ps.setString(2, dto.getUsuario());
             ps.setString(3, dto.getContraseña());
             ps.setString(4, dto.getRol().name());

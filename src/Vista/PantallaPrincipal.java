@@ -136,7 +136,7 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Usuarios.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         Usuarios.setText("Usuarios");
 
-        OpUsuarios.setText("Culsultar");
+        OpUsuarios.setText("Login");
         OpUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 OpUsuariosActionPerformed(evt);

@@ -28,15 +28,16 @@ public class UsuarioDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement(
-    "INSERT INTO usuario (usuario, contraseña, rol, activo) " 
-    + "VALUES (?, ?, ?, ?)"
-    );// se usa asi por que la idea es que el id se autogenere
+                "INSERT INTO Usuario (usuario, contraseña, rol, activo) " 
+                + "VALUES (?, ?, ?, ?)"
+            );// se usa asi por que la idea es que el id se autogenere
             
             ps.setString(1, dto.getUsuario());
-            ps.setString(2, dto.getUsuario());
-            ps.setString(3, dto.getContraseña());
-            ps.setString(4, dto.getRol().name());
-            ps.setBoolean(5, dto.isActivo());
+            ps.setString(2, dto.getContraseña());
+            // Convertir el enum al formato de la BD
+            String rolBD = convertirRolABD(dto.getRol());
+            ps.setString(3, rolBD);
+            ps.setBoolean(4, dto.isActivo());
 
             ps.executeUpdate();
 
@@ -48,13 +49,15 @@ public class UsuarioDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement(
-                "UPDATE usuario SET usuario=?, contraseña=?, rol=?, activo=? "
-                + "WHERE id=?"
+                "UPDATE Usuario SET usuario=?, contraseña=?, rol=?, activo=? "
+                + "WHERE id_usuario=?"
             );
 
             ps.setString(1, dto.getUsuario());
             ps.setString(2, dto.getContraseña());
-            ps.setString(3, dto.getRol().name());
+            // Convertir el enum al formato de la BD
+            String rolBD = convertirRolABD(dto.getRol());
+            ps.setString(3, rolBD);
             ps.setBoolean(4, dto.isActivo());
             ps.setInt(5, dto.getId());
 
@@ -70,19 +73,22 @@ public class UsuarioDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement(
-                "SELECT id, usuario, contraseña, rol, activo "
-                + "FROM usuario WHERE id=?"
+                "SELECT id_usuario, usuario, contraseña, rol, activo "
+                + "FROM Usuario WHERE id_usuario=?"
             );
 
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                String rolBD = rs.getString("rol");
+                T_Rol rolEnum = convertirRolDesdeBD(rolBD);
+                
                 return new UsuarioDto(
-                    rs.getInt("id"),
+                    rs.getInt("id_usuario"),
                     rs.getString("usuario"),
                     rs.getString("contraseña"),
-                    T_Rol.valueOf(rs.getString("rol")),
+                    rolEnum,
                     rs.getBoolean("activo")
                 );
             }
@@ -98,7 +104,7 @@ public class UsuarioDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement(
-                "DELETE FROM usuario WHERE id=?"
+                "DELETE FROM Usuario WHERE id_usuario=?"
             );
 
             ps.setInt(1, id);
@@ -115,18 +121,20 @@ public class UsuarioDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement(
-                "SELECT id, usuario, contraseña, rol, activo FROM usuario"
+                "SELECT id_usuario, usuario, contraseña, rol, activo FROM Usuario"
             );
 
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
+                String rolBD = rs.getString("rol");
+                T_Rol rolEnum = convertirRolDesdeBD(rolBD);
 
                 UsuarioDto dto = new UsuarioDto(
-                    rs.getInt("id"),
+                    rs.getInt("id_usuario"),
                     rs.getString("usuario"),
                     rs.getString("contraseña"),
-                    T_Rol.valueOf(rs.getString("rol")),
+                    rolEnum,
                     rs.getBoolean("activo")
                 );
 
@@ -138,5 +146,62 @@ public class UsuarioDAO {
         }
 
         return lista;
+    }
+    
+    public UsuarioDto buscarPorUsuario(String nombreUsuario) {
+        try {
+            Connection cn = getConnection();
+            PreparedStatement ps = cn.prepareStatement(
+                "SELECT id_usuario, usuario, contraseña, rol, activo "
+                + "FROM Usuario WHERE usuario = ? AND activo = 1"
+            );
+
+            ps.setString(1, nombreUsuario);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String rolBD = rs.getString("rol");
+                T_Rol rolEnum = convertirRolDesdeBD(rolBD);
+                
+                return new UsuarioDto(
+                    rs.getInt("id_usuario"),
+                    rs.getString("usuario"),
+                    rs.getString("contraseña"),
+                    rolEnum,
+                    rs.getBoolean("activo")
+                );
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex);
+        }
+
+        return null;
+    }
+    
+    // Método para convertir el rol de la BD al enum
+    private T_Rol convertirRolDesdeBD(String rolBD) {
+        if (rolBD == null) {
+            return T_Rol.ENTRENADOR; // Valor por defecto
+        }
+        
+        // Convertir roles de la BD al enum
+        if (rolBD.equalsIgnoreCase("Admin") || rolBD.equalsIgnoreCase("Administrador")) {
+            return T_Rol.ADMINISTRADOR;
+        } else if (rolBD.equalsIgnoreCase("Instructor") || rolBD.equalsIgnoreCase("Entrenador")) {
+            return T_Rol.ENTRENADOR;
+        }
+        
+        return T_Rol.ENTRENADOR; // Valor por defecto
+    }
+    
+    // Método para convertir el enum al formato de la BD
+    private String convertirRolABD(T_Rol rol) {
+        if (rol == T_Rol.ADMINISTRADOR) {
+            return "Admin";
+        } else if (rol == T_Rol.ENTRENADOR) {
+            return "Instructor";
+        }
+        return "Instructor"; // Valor por defecto
     }
 }

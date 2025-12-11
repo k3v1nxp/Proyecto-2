@@ -4,17 +4,45 @@
  */
 package Vista;
 
+import Daos.ClaseDAO;
+import Daos.EntrenadorDAO;
+import Modelo.ClaseDto;
+import Modelo.EntrenadorDto;
+import Modelo.Tipos_de_Clases;
+import Util.Validaciones;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author UTN
  */
 public class RegistroClases extends javax.swing.JInternalFrame {
+    
+    private ClaseDAO claseDAO;
+    private EntrenadorDAO entrenadorDAO;
 
     /**
      * Creates new form Clases
      */
     public RegistroClases() {
         initComponents();
+        claseDAO = new ClaseDAO();
+        entrenadorDAO = new EntrenadorDAO();
+        cargarTiposClases();
+    }
+    
+    private void cargarTiposClases() {
+        jComboBox1.removeAllItems();
+        for (Tipos_de_Clases tipo : Tipos_de_Clases.values()) {
+            jComboBox1.addItem(tipo.name());
+        }
+    }
+    
+    private void limpiarCampos() {
+        jTextField1.setText("");
+        jComboBox1.setSelectedIndex(0);
+        jTextField2.setText("");
     }
 
     /**
@@ -102,8 +130,18 @@ public class RegistroClases extends javax.swing.JInternalFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jButton1.setText("LIMPIAR");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("REGISTRAR");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -153,6 +191,56 @@ public class RegistroClases extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            // Validar campos
+            if (jTextField1.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El ID es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (jTextField2.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "El ID del entrenador es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            int idClase = Integer.parseInt(jTextField1.getText().trim());
+            int idEntrenador = Integer.parseInt(jTextField2.getText().trim());
+            
+            // Verificar que el entrenador existe
+            EntrenadorDto entrenador = entrenadorDAO.buscarEntrenadorPorId(idEntrenador);
+            if (entrenador == null) {
+                JOptionPane.showMessageDialog(this, "El entrenador no existe", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            String tipoClase = jComboBox1.getSelectedItem().toString();
+            String horario = "08:00-10:00"; // Por defecto, se puede hacer más complejo después
+            
+            // Crear DTO de clase
+            ClaseDto dto = new ClaseDto(
+                idClase,
+                tipoClase,
+                String.valueOf(idEntrenador),
+                horario,
+                20, // capacidad máxima por defecto
+                0   // capacidad actual inicial
+            );
+            
+            claseDAO.agregar(dto);
+            JOptionPane.showMessageDialog(this, "Clase registrada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            limpiarCampos();
+            
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Error en los números ingresados", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al registrar clase: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

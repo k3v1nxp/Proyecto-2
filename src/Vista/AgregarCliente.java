@@ -4,17 +4,36 @@
  */
 package Vista;
 
+import Daos.ClienteDAO;
+import Modelo.ClienteDto;
+import Modelo.TipoMembresia;
+import Util.Validaciones;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author UTN
  */
 public class AgregarCliente extends javax.swing.JInternalFrame {
+    
+    private ClienteDAO clienteDAO;
 
     /**
      * Creates new form AgregarCliente
      */
     public AgregarCliente() {
         initComponents();
+        clienteDAO = new ClienteDAO();
+        cargarMembresias();
+    }
+    
+    private void cargarMembresias() {
+        jComboBoxMembresia.removeAllItems();
+        for (TipoMembresia tipo : TipoMembresia.values()) {
+            jComboBoxMembresia.addItem(tipo.name());
+        }
     }
 
     /**
@@ -140,6 +159,11 @@ public class AgregarCliente extends javax.swing.JInternalFrame {
         );
 
         BtnLimpiarCliente.setText("LIMPIAR");
+        BtnLimpiarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLimpiarClienteActionPerformed(evt);
+            }
+        });
 
         BtnAgregarCliente.setText("AGREGAR");
         BtnAgregarCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -201,9 +225,71 @@ public class AgregarCliente extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextContactoActionPerformed
 
+    private void BtnLimpiarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarClienteActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_BtnLimpiarClienteActionPerformed
+
     private void BtnAgregarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarClienteActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Validar campos
+            if (!Validaciones.esTextoValido(jTextNombre.getText())) {
+                JOptionPane.showMessageDialog(this, "El nombre es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (!Validaciones.esTextoValido(jTxtID.getText())) {
+                JOptionPane.showMessageDialog(this, "El ID es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            int id = Integer.parseInt(jTxtID.getText());
+            if (!Validaciones.esNumeroPositivo(id)) {
+                JOptionPane.showMessageDialog(this, "El ID debe ser positivo", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (!Validaciones.esTextoValido(jTextContacto.getText())) {
+                JOptionPane.showMessageDialog(this, "El contacto es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Parsear fecha
+            Date fechaNacimiento = Validaciones.parsearFecha(jTextFNacimiento.getText());
+            if (fechaNacimiento == null) {
+                JOptionPane.showMessageDialog(this, "Fecha inválida. Use formato dd/MM/yyyy", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Obtener membresía
+            TipoMembresia membresia = TipoMembresia.valueOf(jComboBoxMembresia.getSelectedItem().toString());
+            
+            // Crear DTO y guardar
+            ClienteDto dto = new ClienteDto(
+                id,
+                jTextNombre.getText().trim(),
+                membresia,
+                fechaNacimiento,
+                Integer.parseInt(jTextContacto.getText().trim())
+            );
+            
+            clienteDAO.agregar(dto);
+            JOptionPane.showMessageDialog(this, "Cliente agregado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            limpiarCampos();
+            
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Error en los números ingresados", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al agregar cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BtnAgregarClienteActionPerformed
+    
+    private void limpiarCampos() {
+        jTxtID.setText("");
+        jTextNombre.setText("");
+        jTextContacto.setText("");
+        jTextFNacimiento.setText("");
+        jComboBoxMembresia.setSelectedIndex(0);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

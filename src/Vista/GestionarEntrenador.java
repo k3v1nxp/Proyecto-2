@@ -4,17 +4,57 @@
  */
 package Vista;
 
+import Daos.EntrenadorDAO;
+import Modelo.EntrenadorDto;
+import Modelo.TiposEspecialidades;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author UTN
  */
 public class GestionarEntrenador extends javax.swing.JInternalFrame {
+    
+    private EntrenadorDAO entrenadorDAO;
 
     /**
      * Creates new form BuscarEntrenador
      */
     public GestionarEntrenador() {
         initComponents();
+        entrenadorDAO = new EntrenadorDAO();
+        cargarEspecialidades();
+        cargarTodosLosEntrenadores();
+    }
+    
+    private void cargarEspecialidades() {
+        FiltroEntrenadorEP.removeAllItems();
+        FiltroEntrenadorEP.addItem("Todas");
+        for (TiposEspecialidades tipo : TiposEspecialidades.values()) {
+            FiltroEntrenadorEP.addItem(tipo.name());
+        }
+    }
+    
+    private void cargarTodosLosEntrenadores() {
+        List<EntrenadorDto> entrenadores = entrenadorDAO.obtenerTodo();
+        mostrarEntrenadoresEnTabla(entrenadores);
+    }
+    
+    private void mostrarEntrenadoresEnTabla(List<EntrenadorDto> entrenadores) {
+        DefaultTableModel modelo = (DefaultTableModel) jTablaEntrenadores.getModel();
+        modelo.setRowCount(0);
+        
+        for (EntrenadorDto entrenador : entrenadores) {
+            Object[] fila = {
+                entrenador.getId(),
+                entrenador.getNombre(),
+                entrenador.getContacto(),
+                entrenador.getEspecialidad().name()
+            };
+            modelo.addRow(fila);
+        }
     }
 
     /**
@@ -65,6 +105,11 @@ public class GestionarEntrenador extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jTablaEntrenadores);
 
         BtnEliminarEntrenador.setText("ELIMINAR");
+        BtnEliminarEntrenador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarEntrenadorActionPerformed(evt);
+            }
+        });
 
         BtnBuscarEntrenador.setText("BUSCAR");
         BtnBuscarEntrenador.addActionListener(new java.awt.event.ActionListener() {
@@ -74,6 +119,11 @@ public class GestionarEntrenador extends javax.swing.JInternalFrame {
         });
 
         BtnActualizarEntrenador.setText("ACTUALIZAR");
+        BtnActualizarEntrenador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnActualizarEntrenadorActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -166,8 +216,76 @@ public class GestionarEntrenador extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnBuscarEntrenadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarEntrenadorActionPerformed
-        // TODO add your handling code here:
+        try {
+            String idFiltro = FiltroEntrenadorID.getText().trim();
+            String nombreFiltro = FiltroEntrenadorNM.getText().trim();
+            String especialidadFiltro = FiltroEntrenadorEP.getSelectedItem().toString();
+            
+            List<EntrenadorDto> todos = entrenadorDAO.obtenerTodo();
+            
+            if (!idFiltro.isEmpty()) {
+                try {
+                    int id = Integer.parseInt(idFiltro);
+                    EntrenadorDto entrenador = entrenadorDAO.buscarEntrenadorPorId(id);
+                    if (entrenador != null) {
+                        java.util.ArrayList<EntrenadorDto> lista = new java.util.ArrayList<>();
+                        lista.add(entrenador);
+                        mostrarEntrenadoresEnTabla(lista);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No se encontró el entrenador", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "ID inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                return;
+            }
+            
+            // Filtrar por nombre y especialidad
+            java.util.ArrayList<EntrenadorDto> filtrados = new java.util.ArrayList<>();
+            for (EntrenadorDto e : todos) {
+                boolean cumpleNombre = nombreFiltro.isEmpty() || e.getNombre().toLowerCase().contains(nombreFiltro.toLowerCase());
+                boolean cumpleEspecialidad = especialidadFiltro.equals("Todas") || e.getEspecialidad().name().equals(especialidadFiltro);
+                if (cumpleNombre && cumpleEspecialidad) {
+                    filtrados.add(e);
+                }
+            }
+            
+            mostrarEntrenadoresEnTabla(filtrados);
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_BtnBuscarEntrenadorActionPerformed
+
+    private void BtnEliminarEntrenadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarEntrenadorActionPerformed
+        int filaSeleccionada = jTablaEntrenadores.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un entrenador para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este entrenador?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirmar == JOptionPane.YES_OPTION) {
+            try {
+                int id = (Integer) jTablaEntrenadores.getValueAt(filaSeleccionada, 0);
+                entrenadorDAO.eliminar(id);
+                JOptionPane.showMessageDialog(this, "Entrenador eliminado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarTodosLosEntrenadores();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_BtnEliminarEntrenadorActionPerformed
+
+    private void BtnActualizarEntrenadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarEntrenadorActionPerformed
+        int filaSeleccionada = jTablaEntrenadores.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un entrenador para actualizar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        JOptionPane.showMessageDialog(this, "Para actualizar, use los campos de filtro y luego modifique desde la base de datos directamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_BtnActualizarEntrenadorActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

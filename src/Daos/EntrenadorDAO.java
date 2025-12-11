@@ -30,14 +30,37 @@ public class EntrenadorDAO {
     public void agregar(EntrenadorDto dto){
         try {
             Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement("INSERT INTO entrenadores (nombre, contacto, especialidad) VALUES (?, ?, ?)");
-              ps.setString(1, dto.getNombre());
-            ps.setString(2, dto.getContacto());
-            ps.setString(3, dto.getEspecialidad().name()); 
+            
+            // Si el ID es 0, generar uno automáticamente
+            int idFinal = dto.getId();
+            if (idFinal == 0) {
+                idFinal = obtenerSiguienteId();
+            }
+            
+            PreparedStatement ps = cn.prepareStatement("INSERT INTO entrenadores (id, nombre, contacto, especialidad) VALUES (?, ?, ?, ?)");
+            ps.setInt(1, idFinal);
+            ps.setString(2, dto.getNombre());
+            ps.setString(3, dto.getContacto());
+            ps.setString(4, dto.getEspecialidad().name()); 
             ps.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error: "+ex);
         }
+    }
+    
+    // Método para obtener el siguiente ID disponible
+    private int obtenerSiguienteId() {
+        try {
+            Connection cn = getConnection();
+            PreparedStatement ps = cn.prepareStatement("SELECT COALESCE(MAX(id), 0) + 1 AS siguiente_id FROM entrenadores");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("siguiente_id");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener siguiente ID: " + ex);
+        }
+        return 1; // Si hay error, devolver 1 como valor por defecto
     }
     
     public void actualizar(EntrenadorDto dto){

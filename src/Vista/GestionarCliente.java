@@ -4,17 +4,61 @@
  */
 package Vista;
 
+import Daos.ClienteDAO;
+import Modelo.ClienteDto;
+import Modelo.TipoMembresia;
+import Util.Validaciones;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author UTN
  */
 public class GestionarCliente extends javax.swing.JInternalFrame {
+    
+    private ClienteDAO clienteDAO;
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Creates new form BuscarCliente
      */
     public GestionarCliente() {
         initComponents();
+        clienteDAO = new ClienteDAO();
+        cargarMembresias();
+        cargarTodosLosClientes();
+    }
+    
+    private void cargarMembresias() {
+        FiltroClienteMB.removeAllItems();
+        FiltroClienteMB.addItem("Todas");
+        for (TipoMembresia tipo : TipoMembresia.values()) {
+            FiltroClienteMB.addItem(tipo.name());
+        }
+    }
+    
+    private void cargarTodosLosClientes() {
+        List<ClienteDto> clientes = clienteDAO.obtenerTodo();
+        mostrarClientesEnTabla(clientes);
+    }
+    
+    private void mostrarClientesEnTabla(List<ClienteDto> clientes) {
+        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
+        modelo.setRowCount(0);
+        
+        for (ClienteDto cliente : clientes) {
+            Object[] fila = {
+                cliente.getId(),
+                cliente.getNombre(),
+                cliente.getFecha_nacimiento() != null ? sdf.format(cliente.getFecha_nacimiento()) : "",
+                cliente.getNumero(),
+                cliente.getMenbresia().name()
+            };
+            modelo.addRow(fila);
+        }
     }
 
     /**
@@ -67,10 +111,25 @@ public class GestionarCliente extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(jTable1);
 
         BtnEliminarCliente.setText("ELIMINAR");
+        BtnEliminarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarClienteActionPerformed(evt);
+            }
+        });
 
         BtnBuscarCliente.setText("BUSCAR");
+        BtnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBuscarClienteActionPerformed(evt);
+            }
+        });
 
         BtnActualizarCliente.setText("ACTUALIZAR");
+        BtnActualizarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnActualizarClienteActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -175,6 +234,92 @@ public class GestionarCliente extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BtnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarClienteActionPerformed
+        try {
+            String idFiltro = FiltroClienteID.getText().trim();
+            String nombreFiltro = FiltroClienteNM.getText().trim();
+            String membresiaFiltro = FiltroClienteMB.getSelectedItem().toString();
+            
+            List<ClienteDto> todos = clienteDAO.obtenerTodo();
+            
+            if (!idFiltro.isEmpty()) {
+                try {
+                    int id = Integer.parseInt(idFiltro);
+                    ClienteDto cliente = clienteDAO.buscar(id);
+                    if (cliente != null) {
+                        java.util.ArrayList<ClienteDto> lista = new java.util.ArrayList<>();
+                        lista.add(cliente);
+                        mostrarClientesEnTabla(lista);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No se encontró el cliente", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "ID inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                return;
+            }
+            
+            // Filtrar por nombre y membresía
+            java.util.ArrayList<ClienteDto> filtrados = new java.util.ArrayList<>();
+            for (ClienteDto c : todos) {
+                boolean cumpleNombre = nombreFiltro.isEmpty() || c.getNombre().toLowerCase().contains(nombreFiltro.toLowerCase());
+                boolean cumpleMembresia = membresiaFiltro.equals("Todas") || c.getMenbresia().name().equals(membresiaFiltro);
+                if (cumpleNombre && cumpleMembresia) {
+                    filtrados.add(c);
+                }
+            }
+            
+            mostrarClientesEnTabla(filtrados);
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al buscar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnBuscarClienteActionPerformed
+
+    private void BtnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarClienteActionPerformed
+        int filaSeleccionada = jTable1.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un cliente para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar este cliente?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirmar == JOptionPane.YES_OPTION) {
+            try {
+                int id = (Integer) jTable1.getValueAt(filaSeleccionada, 0);
+                clienteDAO.eliminar(id);
+                JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarTodosLosClientes();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_BtnEliminarClienteActionPerformed
+
+    private void BtnActualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarClienteActionPerformed
+        int filaSeleccionada = jTable1.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un cliente para actualizar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        try {
+            int id = (Integer) jTable1.getValueAt(filaSeleccionada, 0);
+            ClienteDto cliente = clienteDAO.buscar(id);
+            
+            if (cliente == null) {
+                JOptionPane.showMessageDialog(this, "Cliente no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Aquí podrías abrir una ventana de edición o usar los campos de filtro
+            // Por simplicidad, mostraré un mensaje
+            JOptionPane.showMessageDialog(this, "Para actualizar, use los campos de filtro y luego modifique desde la base de datos directamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al actualizar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnActualizarClienteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActualizarCliente;

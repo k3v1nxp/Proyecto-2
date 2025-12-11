@@ -4,17 +4,25 @@
  */
 package Vista;
 
+import Daos.UsuarioDAO;
+import Modelo.UsuarioDto;
+import Util.Seguridad;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author UTN
  */
 public class FUsuarios extends javax.swing.JInternalFrame {
+    
+    private UsuarioDAO usuarioDAO;
 
     /**
      * Creates new form FUsuarios
      */
     public FUsuarios() {
         initComponents();
+        usuarioDAO = new UsuarioDAO();
     }
 
     /**
@@ -31,7 +39,7 @@ public class FUsuarios extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
 
         setClosable(true);
@@ -52,6 +60,11 @@ public class FUsuarios extends javax.swing.JInternalFrame {
         jLabel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jButton1.setText("ingresar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -106,6 +119,36 @@ public class FUsuarios extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            String usuario = jTextField1.getText().trim();
+            String contraseña = new String(jTextField2.getPassword()).trim();
+            
+            if (usuario.isEmpty() || contraseña.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Complete todos los campos", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            UsuarioDto usuarioDto = usuarioDAO.buscarPorUsuario(usuario);
+            
+            if (usuarioDto == null) {
+                JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Verificar contraseña
+            if (Seguridad.verificarContraseña(contraseña, usuarioDto.getContraseña())) {
+                String rol = usuarioDto.getRol().name();
+                JOptionPane.showMessageDialog(this, "Bienvenido " + usuario + "\nRol: " + rol, "Login exitoso", JOptionPane.INFORMATION_MESSAGE);
+                // Aquí podrías guardar el usuario actual o cerrar esta ventana y abrir la principal
+            } else {
+                JOptionPane.showMessageDialog(this, "Contraseña incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al iniciar sesión: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -114,6 +157,6 @@ public class FUsuarios extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JPasswordField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

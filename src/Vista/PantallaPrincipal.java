@@ -74,6 +74,11 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Clases.add(OpRegistro);
 
         OpGestion.setText("Gestion");
+        OpGestion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpGestionActionPerformed(evt);
+            }
+        });
         Clases.add(OpGestion);
 
         jMenuBar1.add(Clases);
@@ -205,6 +210,12 @@ public class PantallaPrincipal extends javax.swing.JFrame {
         Escritorio.add(buscarCliente);
         buscarCliente.setVisible(true);
     }//GEN-LAST:event_OpBuscarClienteActionPerformed
+
+    private void OpGestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpGestionActionPerformed
+        GestionClases gestion = new GestionClases();
+        Escritorio.add(gestion);
+        gestion.setVisible(true);
+    }//GEN-LAST:event_OpGestionActionPerformed
 
     /**
      * @param args the command line arguments

@@ -4,17 +4,56 @@
  */
 package Vista;
 
+import Daos.ClaseDAO;
+import Modelo.ClaseDto;
+import Modelo.Tipos_de_Clases;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author UTN
  */
 public class GestionClases extends javax.swing.JInternalFrame {
+    
+    private ClaseDAO claseDAO;
 
     /**
      * Creates new form GestionClases
      */
     public GestionClases() {
         initComponents();
+        claseDAO = new ClaseDAO();
+        cargarTiposClases();
+        cargarTodasLasClases();
+    }
+    
+    private void cargarTiposClases() {
+        FiltroClasesT.removeAllItems();
+        FiltroClasesT.addItem("Todas");
+        for (Tipos_de_Clases tipo : Tipos_de_Clases.values()) {
+            FiltroClasesT.addItem(tipo.name());
+        }
+    }
+    
+    private void cargarTodasLasClases() {
+        List<ClaseDto> clases = claseDAO.obtenerTodo();
+        mostrarClasesEnTabla(clases);
+    }
+    
+    private void mostrarClasesEnTabla(List<ClaseDto> clases) {
+        DefaultTableModel modelo = (DefaultTableModel) TablaGestionClases.getModel();
+        modelo.setRowCount(0);
+        
+        for (ClaseDto clase : clases) {
+            Object[] fila = {
+                clase.getId_clase(),
+                clase.getTipo(),
+                clase.getidEntrenador()
+            };
+            modelo.addRow(fila);
+        }
     }
 
     /**
@@ -65,12 +104,32 @@ public class GestionClases extends javax.swing.JInternalFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         BtnEliminarClase.setText("ELIMINAR");
+        BtnEliminarClase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarClaseActionPerformed(evt);
+            }
+        });
 
         BtnActualizarClase.setText("ACTUALIZAR");
+        BtnActualizarClase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnActualizarClaseActionPerformed(evt);
+            }
+        });
 
         BtnAgregarClase.setText("AGREGAR");
+        BtnAgregarClase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAgregarClaseActionPerformed(evt);
+            }
+        });
 
         BtnFiltrarClase.setText("FILTRAR");
+        BtnFiltrarClase.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnFiltrarClaseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -175,6 +234,77 @@ public class GestionClases extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BtnFiltrarClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnFiltrarClaseActionPerformed
+        try {
+            String idFiltro = FiltroClasesID.getText().trim();
+            String tipoFiltro = FiltroClasesT.getSelectedItem().toString();
+            String entrenadorFiltro = FiltroClasesET.getText().trim();
+            
+            List<ClaseDto> todas = claseDAO.obtenerTodo();
+            
+            if (!idFiltro.isEmpty()) {
+                try {
+                    int id = Integer.parseInt(idFiltro);
+                    ClaseDto clase = claseDAO.buscar(id);
+                    if (clase != null) {
+                        java.util.ArrayList<ClaseDto> lista = new java.util.ArrayList<>();
+                        lista.add(clase);
+                        mostrarClasesEnTabla(lista);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "No se encontró la clase", "Información", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "ID inválido", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                return;
+            }
+            
+            // Filtrar
+            java.util.ArrayList<ClaseDto> filtradas = new java.util.ArrayList<>();
+            for (ClaseDto c : todas) {
+                boolean cumpleTipo = tipoFiltro.equals("Todas") || c.getTipo().equals(tipoFiltro);
+                boolean cumpleEntrenador = entrenadorFiltro.isEmpty() || c.getidEntrenador().equals(entrenadorFiltro);
+                if (cumpleTipo && cumpleEntrenador) {
+                    filtradas.add(c);
+                }
+            }
+            
+            mostrarClasesEnTabla(filtradas);
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al filtrar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnFiltrarClaseActionPerformed
+
+    private void BtnEliminarClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarClaseActionPerformed
+        int filaSeleccionada = TablaGestionClases.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione una clase para eliminar", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int confirmar = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar esta clase?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirmar == JOptionPane.YES_OPTION) {
+            try {
+                int id = (Integer) TablaGestionClases.getValueAt(filaSeleccionada, 0);
+                claseDAO.eliminar(id);
+                JOptionPane.showMessageDialog(this, "Clase eliminada correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                cargarTodasLasClases();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_BtnEliminarClaseActionPerformed
+
+    private void BtnActualizarClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarClaseActionPerformed
+        JOptionPane.showMessageDialog(this, "Para actualizar, use los campos de filtro y luego modifique desde la base de datos directamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_BtnActualizarClaseActionPerformed
+
+    private void BtnAgregarClaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarClaseActionPerformed
+        RegistroClases registro = new RegistroClases();
+        this.getParent().add(registro);
+        registro.setVisible(true);
+    }//GEN-LAST:event_BtnAgregarClaseActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActualizarClase;

@@ -30,13 +30,14 @@ public class ClaseDAO {
     public void agregar(ClaseDto dto){
         try {
             Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement("INSERT INTO clases (tipo, id_entrenador, horario, capacidad_maxima, capacidad_actual, activa) VALUES (?, ?, ?, ?, ?, ?)");
-            ps.setString(1, dto.getTipo()); // String del DTO
-            ps.setInt(2, Integer.parseInt(dto.getidEntrenador())); 
-            ps.setString(3, dto.getHorario());
-            ps.setInt(4, dto.getCapacidadMaxima());
-            ps.setInt(5, dto.getCapacidadActual());
-            ps.setBoolean(6, true);
+            PreparedStatement ps = cn.prepareStatement("INSERT INTO clases (id_clase, tipo, id_entrenador, horario, capacidad_maxima, capacidad_actual) VALUES (?, ?, ?, ?, ?, ?)");
+            ps.setInt(1, dto.getId_clase());
+            ps.setString(2, dto.getTipo()); // String del DTO
+            ps.setInt(3, Integer.parseInt(dto.getidEntrenador())); 
+            ps.setString(4, dto.getHorario());
+            ps.setInt(5, dto.getCapacidadMaxima());
+            ps.setInt(6, dto.getCapacidadActual());
+            ps.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error: "+ex);
         }
@@ -61,8 +62,8 @@ public class ClaseDAO {
     public ClaseDto buscar(int idClase){
         try {
             Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement(  "SELECT id_clase, tipo, entrenador, horario, capacidad_maxima, capacidad_actual " +
-            "FROM clases WHERE id_clase = ? AND activa = TRUE");
+            PreparedStatement ps = cn.prepareStatement(  "SELECT id_clase, tipo, id_entrenador, horario, capacidad_maxima, capacidad_actual " +
+            "FROM clases WHERE id_clase = ?");
             
             ps.setInt(1, idClase);
             ResultSet rs= ps.executeQuery();
@@ -87,7 +88,7 @@ public class ClaseDAO {
     public void eliminar(int id){ 
         try {
             Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement("DELETE clases From clases where id = ?");
+            PreparedStatement ps = cn.prepareStatement("DELETE FROM clases WHERE id_clase = ?");
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (SQLException ex) {
@@ -99,7 +100,7 @@ public class ClaseDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement("SELECT id_clase, tipo, id_entrenador, horario, capacidad_maxima, capacidad_actual " +
-            "FROM clases WHERE activa = TRUE");
+            "FROM clases");
             ResultSet rs= ps.executeQuery();
             List<ClaseDto> list=new ArrayList(); 
             while (rs.next()){

@@ -4,17 +4,73 @@
  */
 package Vista;
 
+import Daos.ClienteDAO;
+import Daos.PagoDAO;
+import Modelo.ClienteDto;
+import Modelo.PagoDto;
+import Util.Validaciones;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author UTN
  */
 public class Pagos extends javax.swing.JInternalFrame {
+    
+    private ClienteDAO clienteDAO;
+    private PagoDAO pagoDAO;
+    private ClienteDto clienteActual;
+    private static final double IMPUESTO_PORCENTAJE = 0.13; // 13% de impuesto
 
     /**
      * Creates new form Pagos
      */
     public Pagos() {
         initComponents();
+        clienteDAO = new ClienteDAO();
+        pagoDAO = new PagoDAO();
+        txtSubtotal.setEditable(false);
+        txtImpuesto.setEditable(false);
+        txtTotal.setEditable(false);
+        FiltroNombreClientePago.setEditable(false);
+        FiltroMembresiaClientePago.setEditable(false);
+    }
+    
+    private void calcularTotales() {
+        try {
+            if (TxtMontoAgregar.getText().trim().isEmpty()) {
+                return;
+            }
+            
+            double monto = Double.parseDouble(TxtMontoAgregar.getText().trim());
+            if (monto <= 0) {
+                JOptionPane.showMessageDialog(this, "El monto debe ser mayor a 0", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            double subtotal = monto;
+            double impuesto = subtotal * IMPUESTO_PORCENTAJE;
+            double total = subtotal + impuesto;
+            
+            txtSubtotal.setText(String.format("%.2f", subtotal));
+            txtImpuesto.setText(String.format("%.2f", impuesto));
+            txtTotal.setText(String.format("%.2f", total));
+            
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Monto inválido", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void limpiarCampos() {
+        FiltroIDClientePago.setText("");
+        FiltroNombreClientePago.setText("");
+        FiltroMembresiaClientePago.setText("");
+        TxtMontoAgregar.setText("");
+        txtSubtotal.setText("");
+        txtImpuesto.setText("");
+        txtTotal.setText("");
+        clienteActual = null;
     }
 
     /**
@@ -145,10 +201,31 @@ public class Pagos extends javax.swing.JInternalFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         BtnBuscarCliente_X_ID.setText("BUSCAR");
+        BtnBuscarCliente_X_ID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBuscarCliente_X_IDActionPerformed(evt);
+            }
+        });
 
         BtnLimpiarProceso.setText("LIMPIAR");
+        BtnLimpiarProceso.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLimpiarProcesoActionPerformed(evt);
+            }
+        });
 
         BtnRealizarPago.setText("REALIZAR PAGO");
+        BtnRealizarPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnRealizarPagoActionPerformed(evt);
+            }
+        });
+        
+        TxtMontoAgregar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                calcularTotales();
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -198,6 +275,83 @@ public class Pagos extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BtnBuscarCliente_X_IDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBuscarCliente_X_IDActionPerformed
+        try {
+            String idTexto = FiltroIDClientePago.getText().trim();
+            if (idTexto.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese un ID de cliente", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            int id = Integer.parseInt(idTexto);
+            clienteActual = clienteDAO.buscar(id);
+            
+            if (clienteActual != null) {
+                FiltroNombreClientePago.setText(clienteActual.getNombre());
+                FiltroMembresiaClientePago.setText(clienteActual.getMenbresia().name());
+                TxtMontoAgregar.requestFocus();
+            } else {
+                JOptionPane.showMessageDialog(this, "Cliente no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+                limpiarCampos();
+            }
+            
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "ID inválido", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al buscar cliente: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnBuscarCliente_X_IDActionPerformed
+
+    private void BtnLimpiarProcesoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarProcesoActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_BtnLimpiarProcesoActionPerformed
+
+    private void BtnRealizarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRealizarPagoActionPerformed
+        try {
+            if (clienteActual == null) {
+                JOptionPane.showMessageDialog(this, "Debe buscar un cliente primero", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if (TxtMontoAgregar.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Ingrese un monto", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            double monto = Double.parseDouble(TxtMontoAgregar.getText().trim());
+            if (monto <= 0) {
+                JOptionPane.showMessageDialog(this, "El monto debe ser mayor a 0", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            double subtotal = monto;
+            double impuesto = subtotal * IMPUESTO_PORCENTAJE;
+            double total = subtotal + impuesto;
+            
+            // Crear DTO de pago - el ID se autogenera
+            PagoDto pagoDto = new PagoDto(
+                0,
+                subtotal,
+                impuesto,
+                total,
+                (int) monto,
+                clienteActual.getId(),
+                new Date()
+            );
+            
+            pagoDAO.agregar(pagoDto);
+            JOptionPane.showMessageDialog(this, "Pago registrado correctamente\nTotal: $" + String.format("%.2f", total), "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Limpiar monto y recalcular
+            TxtMontoAgregar.setText("");
+            calcularTotales();
+            
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Monto inválido", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al realizar pago: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnRealizarPagoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnBuscarCliente_X_ID;

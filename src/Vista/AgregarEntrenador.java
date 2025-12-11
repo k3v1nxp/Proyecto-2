@@ -4,17 +4,41 @@
  */
 package Vista;
 
+import Daos.EntrenadorDAO;
+import Modelo.EntrenadorDto;
+import Modelo.TiposEspecialidades;
+import Util.Validaciones;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author UTN
  */
 public class AgregarEntrenador extends javax.swing.JInternalFrame {
+    
+    private EntrenadorDAO entrenadorDAO;
 
     /**
      * Creates new form AgregarEntrenador
      */
     public AgregarEntrenador() {
         initComponents();
+        entrenadorDAO = new EntrenadorDAO();
+        cargarEspecialidades();
+    }
+    
+    private void cargarEspecialidades() {
+        jComboBox1.removeAllItems();
+        for (TiposEspecialidades tipo : TiposEspecialidades.values()) {
+            jComboBox1.addItem(tipo.name());
+        }
+    }
+    
+    private void limpiarCampos() {
+        jTextIDEntrenador.setText("");
+        jTextNombreEntrenador.setText("");
+        jTextContactoEntrenador.setText("");
+        jComboBox1.setSelectedIndex(0);
     }
 
     /**
@@ -119,8 +143,18 @@ public class AgregarEntrenador extends javax.swing.JInternalFrame {
         );
 
         BtnLimpiarEntrenador.setText("LIMPIAR");
+        BtnLimpiarEntrenador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLimpiarEntrenadorActionPerformed(evt);
+            }
+        });
 
         BtnAgregarEntrenador.setText("AGREGAR");
+        BtnAgregarEntrenador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAgregarEntrenadorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -169,6 +203,58 @@ public class AgregarEntrenador extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BtnAgregarEntrenadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarEntrenadorActionPerformed
+        try {
+            // Validar campos
+            if (!Validaciones.esTextoValido(jTextNombreEntrenador.getText())) {
+                JOptionPane.showMessageDialog(this, "El nombre es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (!Validaciones.esTextoValido(jTextContactoEntrenador.getText())) {
+                JOptionPane.showMessageDialog(this, "El contacto es obligatorio", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Obtener especialidad
+            TiposEspecialidades especialidad = TiposEspecialidades.valueOf(jComboBox1.getSelectedItem().toString());
+            
+            // Obtener ID si está ingresado, sino será 0 y se generará automáticamente
+            int id = 0;
+            String idTexto = jTextIDEntrenador.getText().trim();
+            if (!idTexto.isEmpty()) {
+                try {
+                    id = Integer.parseInt(idTexto);
+                    if (id <= 0) {
+                        JOptionPane.showMessageDialog(this, "El ID debe ser un número positivo", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "El ID debe ser un número válido", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            
+            // Crear DTO - si id es 0, se generará automáticamente en el DAO
+            EntrenadorDto dto = new EntrenadorDto(
+                id,
+                jTextNombreEntrenador.getText().trim(),
+                jTextContactoEntrenador.getText().trim(),
+                especialidad
+            );
+            
+            entrenadorDAO.agregar(dto);
+            JOptionPane.showMessageDialog(this, "Entrenador agregado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            limpiarCampos();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error al agregar entrenador: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnAgregarEntrenadorActionPerformed
+
+    private void BtnLimpiarEntrenadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarEntrenadorActionPerformed
+        limpiarCampos();
+    }//GEN-LAST:event_BtnLimpiarEntrenadorActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregarEntrenador;

@@ -86,7 +86,7 @@
                           <Component id="jLabel3" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jTextField1" min="-2" pref="147" max="-2" attributes="0"/>
+                          <Component id="jTextNombre" min="-2" pref="147" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jTxtID" min="-2" pref="86" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -123,7 +123,7 @@
                   </Group>
                   <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTextNombre" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jTxtID" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jComboBoxMembresia" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -193,7 +193,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField1">
+        <Component class="javax.swing.JTextField" name="jTextNombre">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>

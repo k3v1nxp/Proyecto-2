@@ -40,9 +40,9 @@ public class Pagos extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        BtnBuscarCliente_X_ID = new javax.swing.JButton();
+        BtnLimpiarProceso = new javax.swing.JButton();
+        BtnRealizarPago = new javax.swing.JButton();
 
         setClosable(true);
         setIconifiable(true);
@@ -136,11 +136,11 @@ public class Pagos extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButton1.setText("BUSCAR");
+        BtnBuscarCliente_X_ID.setText("BUSCAR");
 
-        jButton2.setText("LIMPIAR");
+        BtnLimpiarProceso.setText("LIMPIAR");
 
-        jButton3.setText("REALIZAR PAGO");
+        BtnRealizarPago.setText("REALIZAR PAGO");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -148,11 +148,11 @@ public class Pagos extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(BtnBuscarCliente_X_ID)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(BtnLimpiarProceso)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(BtnRealizarPago)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -160,9 +160,9 @@ public class Pagos extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(BtnBuscarCliente_X_ID)
+                    .addComponent(BtnLimpiarProceso)
+                    .addComponent(BtnRealizarPago))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -192,9 +192,9 @@ public class Pagos extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton BtnBuscarCliente_X_ID;
+    private javax.swing.JButton BtnLimpiarProceso;
+    private javax.swing.JButton BtnRealizarPago;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

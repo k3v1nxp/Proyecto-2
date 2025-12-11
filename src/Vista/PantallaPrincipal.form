@@ -124,7 +124,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="OpUsuarios">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Culsultar"/>
+                <Property name="text" type="java.lang.String" value="Login"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="OpUsuariosActionPerformed"/>

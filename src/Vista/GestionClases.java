@@ -81,6 +81,10 @@ public class GestionClases extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         FiltroClasesET = new javax.swing.JTextField();
 
+        setClosable(true);
+        setIconifiable(true);
+        setMaximizable(true);
+        setResizable(true);
         setPreferredSize(new java.awt.Dimension(544, 410));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
@@ -167,6 +171,12 @@ public class GestionClases extends javax.swing.JInternalFrame {
 
         jLabel3.setText("ID:");
         jLabel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        FiltroClasesID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FiltroClasesIDActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Entrenador:");
         jLabel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -305,6 +315,10 @@ public class GestionClases extends javax.swing.JInternalFrame {
         this.getParent().add(registro);
         registro.setVisible(true);
     }//GEN-LAST:event_BtnAgregarClaseActionPerformed
+
+    private void FiltroClasesIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FiltroClasesIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FiltroClasesIDActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActualizarClase;

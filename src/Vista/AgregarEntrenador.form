@@ -237,11 +237,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="LIMPIAR"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnLimpiarEntrenadorActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="BtnAgregarEntrenador">
           <Properties>
             <Property name="text" type="java.lang.String" value="AGREGAR"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnAgregarEntrenadorActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

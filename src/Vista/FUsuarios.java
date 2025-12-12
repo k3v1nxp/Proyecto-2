@@ -60,6 +60,11 @@ public class FUsuarios extends javax.swing.JInternalFrame {
         jLabel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jButton1.setText("ingresar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -129,7 +134,7 @@ public class FUsuarios extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
+            System.out.println("TEXTO INGRESADO EXACTO = [" + contraseña + "]"); System.out.println("HASH INGRESADO = " + Seguridad.hashcode(contraseña)); System.out.println("HASH ESPERADO BD = " + usuarioDto.getContraseña());
             // Verificar contraseña
             if (Seguridad.verificarContraseña(contraseña, usuarioDto.getContraseña())) {
                 String rol = usuarioDto.getRol().name();

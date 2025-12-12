@@ -30,8 +30,15 @@ public class ClaseDAO {
     public void agregar(ClaseDto dto){
         try {
             Connection cn = getConnection();
+            
+            // Si el ID es 0, generar uno automáticamente o dejar que AUTO_INCREMENT lo genere
+            int idFinal = dto.getId_clase();
+            if (idFinal == 0) {
+                idFinal = obtenerSiguienteId();
+            }
+            
             PreparedStatement ps = cn.prepareStatement("INSERT INTO clases (id_clase, tipo, id_entrenador, horario, capacidad_maxima, capacidad_actual) VALUES (?, ?, ?, ?, ?, ?)");
-            ps.setInt(1, dto.getId_clase());
+            ps.setInt(1, idFinal);
             ps.setString(2, dto.getTipo()); // String del DTO
             ps.setInt(3, Integer.parseInt(dto.getidEntrenador())); 
             ps.setString(4, dto.getHorario());
@@ -41,6 +48,21 @@ public class ClaseDAO {
         } catch (SQLException ex) {
             System.out.println("Error: "+ex);
         }
+    }
+    
+    // Método para obtener el siguiente ID disponible
+    private int obtenerSiguienteId() {
+        try {
+            Connection cn = getConnection();
+            PreparedStatement ps = cn.prepareStatement("SELECT COALESCE(MAX(id_clase), 0) + 1 AS siguiente_id FROM clases");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("siguiente_id");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener siguiente ID: " + ex);
+        }
+        return 1; // Si hay error, devolver 1 como valor por defecto
     }
     
     public void actualizar(ClaseDto dto){

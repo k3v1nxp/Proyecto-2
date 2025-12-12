@@ -28,12 +28,19 @@ public class ClienteDAO {
     public void agregar(ClienteDto dto) {
         try {
             Connection cn = getConnection();
+            
+            // Si el ID es 0, generar uno automáticamente
+            int idFinal = dto.getId();
+            if (idFinal == 0) {
+                idFinal = obtenerSiguienteId();
+            }
+            
             PreparedStatement ps = cn.prepareStatement(
                 "INSERT INTO clientes (id, nombre, membresia, fecha_nacimiento, numero, fecha_vencimiento) "
                 + "VALUES (?, ?, ?, ?, ?, ?)"
             );
 
-            ps.setInt(1, dto.getId());
+            ps.setInt(1, idFinal);
             ps.setString(2, dto.getNombre());
             ps.setString(3, dto.getMenbresia().name());
             ps.setDate(4, new Date(dto.getFecha_nacimiento().getTime()));
@@ -50,6 +57,21 @@ public class ClienteDAO {
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
         }
+    }
+    
+    // Método para obtener el siguiente ID disponible
+    private int obtenerSiguienteId() {
+        try {
+            Connection cn = getConnection();
+            PreparedStatement ps = cn.prepareStatement("SELECT COALESCE(MAX(id), 0) + 1 AS siguiente_id FROM clientes");
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("siguiente_id");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener siguiente ID: " + ex);
+        }
+        return 1; // Si hay error, devolver 1 como valor por defecto
     }
 
     public void actualizar(ClienteDto dto) {

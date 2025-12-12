@@ -9,7 +9,8 @@ package Modelo;
  * @author UTN
  */
 public enum TiposEspecialidades {
-    Fuerza_Y_acondicionamiento("Fuerza"),
+    FUERZA_Y_ACONDICIONAMIENTO("Fuerza"),
+
 
     Entrenamiento_cardiovascular("Cardio"),
 

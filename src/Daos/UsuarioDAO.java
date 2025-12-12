@@ -28,9 +28,7 @@ public class UsuarioDAO {
         try {
             Connection cn = getConnection();
             PreparedStatement ps = cn.prepareStatement(
-                "INSERT INTO Usuario (usuario, contraseña, rol, activo) " 
-                + "VALUES (?, ?, ?, ?)"
-            );// se usa asi por que la idea es que el id se autogenere
+                "INSERT INTO Usuario (usuario, contraseña, rol, activo) ");// se usa asi por que la idea es que el id se autogenere
             
             ps.setString(1, dto.getUsuario());
             ps.setString(2, dto.getContraseña());
@@ -38,6 +36,7 @@ public class UsuarioDAO {
             String rolBD = convertirRolABD(dto.getRol());
             ps.setString(3, rolBD);
             ps.setBoolean(4, dto.isActivo());
+        
 
             ps.executeUpdate();
 

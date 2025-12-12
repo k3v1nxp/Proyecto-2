@@ -29,17 +29,31 @@ public class PagoDAO {
      public void agregar(PagoDto dto) {
         try {
             Connection cn = getConnection();
-            PreparedStatement ps = cn.prepareStatement(
-                "INSERT INTO pago (subtotal, impuesto, total, monto, id_cliente, fecha) "
-                + "VALUES (?, ?, ?, ?, ?, ?)"
-            );
+            
+            // Si el ID es 0, no se inserta y se deja que AUTO_INCREMENT lo genere
+            // Si tiene valor, se inserta manualmente
+            String sql;
+            if (dto.getId_pago() == 0) {
+                sql = "INSERT INTO pago (subtotal, impuesto, total, monto, id_cliente, fecha) "
+                    + "VALUES (?, ?, ?, ?, ?, ?)";
+            } else {
+                sql = "INSERT INTO pago (id_pago, subtotal, impuesto, total, monto, id_cliente, fecha) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            }
+            
+            PreparedStatement ps = cn.prepareStatement(sql);
+            
+            int paramIndex = 1;
+            if (dto.getId_pago() != 0) {
+                ps.setInt(paramIndex++, dto.getId_pago());
+            }
 
-            ps.setDouble(1, dto.getSubtotal());
-            ps.setDouble(2, dto.getImpuesto());
-            ps.setDouble(3, dto.getTotal());
-            ps.setInt(4, dto.getMonto());
-            ps.setInt(5, dto.getIdCliente());
-            ps.setDate(6, new Date(dto.getFecha().getTime()));
+            ps.setDouble(paramIndex++, dto.getSubtotal());
+            ps.setDouble(paramIndex++, dto.getImpuesto());
+            ps.setDouble(paramIndex++, dto.getTotal());
+            ps.setInt(paramIndex++, dto.getMonto());
+            ps.setInt(paramIndex++, dto.getIdCliente());
+            ps.setDate(paramIndex++, new Date(dto.getFecha().getTime()));
 
             ps.executeUpdate();
 
